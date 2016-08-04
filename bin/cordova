@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
-var cordova = require('../index');
+var cordova = require('cordova-cli-lib');
 
 var argv = process.argv.slice();
 argv.shift();
 argv.shift();
 
-cordova(argv);
+cordova.run(argv);

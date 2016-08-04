@@ -1,7 +1,7 @@
 {
   "name": "cordova-cli",
   "version": "0.5.0",
-  "description": "Apahce Cordova CLI",
+  "description": "Apahce Cordova CLI wrapper",
   "main": "index.js",
   "bin": {
     "cordova": "./bin/cordova"
@@ -12,19 +12,11 @@
   },
   "files": [
     "package.json",
-    "index.js",
-    "bin",
-    "libs"
+    "bin"
   ],
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "es6-promisify": "^4.1.0",
-    "underscore": "^1.8.3"
-  },
-  "devDependencies": {
-    "eslint": "^3.1.1",
-    "eslint-config-google": "^0.6.0",
-    "jasmine": "^2.4.1"
+    "cordova-cli-lib": "^0.5.0"
   }
 }
