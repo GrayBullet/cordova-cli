@@ -10,6 +10,12 @@
     "test": "jasmine",
     "lint": "eslint .eslintrc.js index.js 'libs/**/*.js' 'spec/**/*.js'"
   },
+  "files": [
+    "package.json",
+    "index.js",
+    "bin",
+    "libs"
+  ],
   "author": "",
   "license": "MIT",
   "dependencies": {
