@@ -25,6 +25,14 @@ var invoke = function (args) {
   };
 
   return cordova(args, options)
+    .then(function (code) {
+      // When return code is not 0, exit process.
+      if (!code) {
+        return;
+      }
+
+      process.exit(code);
+    })
     .then(function () {
       if (cordovaArguments.isCreate(args)) {
         var root = cordovaArguments.getRoot(args);
