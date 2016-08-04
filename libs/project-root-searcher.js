@@ -1,14 +1,20 @@
 var fs = require('fs');
 var path = require('path');
 var promisify = require('es6-promisify');
+var Promise = require('./promise');
 
 var stat = promisify(fs.stat);
 
+/**
+ * Project root search object.
+ * @constructor
+ */
 function ProjectRootSearcher() {
 }
 
 ProjectRootSearcher.prototype.stat = function () {
   var args = Array.prototype.slice.apply(arguments);
+  // noinspection JSUnresolvedFunction
   return stat.apply(null, args);
 };
 
@@ -45,7 +51,6 @@ ProjectRootSearcher.prototype.search = function (optDir) {
         }
 
         var parent = path.dirname(dir);
-        console.log(dir, parent);
         if (parent === dir) {
           // search finish if root directory;
           resolve();

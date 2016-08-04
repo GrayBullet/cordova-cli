@@ -3,50 +3,70 @@
 var spawn = require('child_process').spawn;
 var path = require('path');
 var _ = require('underscore');
+var Promise = require('./promise');
 var ProjectRootSearcher = require('./project-root-searcher');
 
+/**
+ * Execute cordova command.
+ * @param {Array} args Command line arguments.
+ * @param {Object} optOptions Options.
+ * @return {Promise} Promise object.
+ */
 function cordova(args, optOptions) {
-  return new Promise(function (resolve) {
-    var env = _.assign({}, process.env, {
-      PATH: path.join(process.cwd(), 'node_modules', '.bin') + ':' + process.env.PATH
-    });
-    var options = _.assign({}, {env: env, stdio: 'inherit'}, optOptions);
+  var options = optOptions || {};
 
-    spawn('cordova', args, options)
-      .on('close', function (code) {
-        resolve(code);
-      });
+  return Promise.resolve()
+    .then(function () {
+      return getCmd(options);
+    })
+    .then(function (cmd) {
+      return invoke(cmd, args, optOptions);
+    });
+}
+
+/**
+ * Execute command.
+ * @param {String} cmd Execute command path.
+ * @param {Array} args Command line arguments.
+ * @param {Object} optOptions Options.
+ * @return {Promise} Promise object.
+ */
+function invoke(cmd, args, optOptions) {
+  return new Promise(function (resolve, reject) {
+    var options = _.assign({}, {env: process.env, stdio: 'inherit'}, optOptions);
+
+    try {
+      spawn(cmd, args, options)
+        .on('close', resolve);
+    } catch (error) {
+      reject(error);
+    }
   });
 }
 
-function getCmd() {
+/**
+ * Get project local `cordova` command path.
+ * @return {Promise.<String>} Project local `cordova` command path.
+ */
+function getCmdFromSearcher() {
   return ProjectRootSearcher.search()
     .then(function (dir) {
-      return path.join(dir.bin, 'cordova')
+      return path.join(dir.bin, 'cordova');
     });
 }
 
-cordova.fromPath = function (cmd) {
-  return function (args, optOptions) {
-    return new Promise(function (resolve, reject) {
-      var options = _.assign({}, {env: process.env, stdio: 'inherit'}, optOptions);
+/**
+ * Get project local `cordova`command path.
+ * From options or searcher.
+ * @param {Object} options Options.
+ * @return {Promise.<String>} Project local `cordova` commandpath.
+ */
+function getCmd(options) {
+  if (options && options.cmd) {
+    return Promise.resolve(options.cmd);
+  }
 
-      try {
-        spawn(cmd, args, options)
-          .on('close', resolve);
-      } catch (error) {
-        console.log(error);
-        reject(error);
-      }
-    });
-  };
-};
-
-cordova.fromAuto = function () {
-  return getCmd()
-    .then(function (cmd) {
-      return cordova.fromPath(cmd);
-    });
-};
+  return getCmdFromSearcher();
+}
 
 module.exports = cordova;

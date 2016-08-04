@@ -11,7 +11,7 @@ describe('json-options-loader', function () {
       expect(options).toEqual({
         cwd: 'cordova',
         data: 'hoge'
-      })
+      });
     });
 
     it('json file not exists', function () {

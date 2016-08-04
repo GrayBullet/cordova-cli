@@ -1,3 +1,4 @@
+var Promise = require('../../libs/promise');
 var ProjectRootSearcher = require('../../libs/project-root-searcher');
 
 describe('ProjectRootSearcher', function () {
@@ -63,7 +64,6 @@ describe('ProjectRootSearcher', function () {
           expect(result).toBeUndefined();
         })
         .then(done);
-
     });
   });
 });
