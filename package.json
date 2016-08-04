@@ -17,6 +17,6 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "cordova-cli-lib": "^0.5.0"
+    "cordova-cli-lib": ""
   }
 }
